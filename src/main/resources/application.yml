@@ -16,6 +16,11 @@ spring:
               uri: lb://byeol23-backend
               predicates:
                 - Path=/api/**
+            - id: byeol23-auth
+              uri: lb://byeol23-auth
+              predicates:
+                - Path=/auth/**
+
 #?? auth? ?????
 
 logging:
