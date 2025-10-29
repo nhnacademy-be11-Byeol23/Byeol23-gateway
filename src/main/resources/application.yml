@@ -12,12 +12,11 @@ spring:
       server:
         webflux:
           routes:
-            - id: backend-service
-              uri: lb://BACKEND-SERVICE
+            - id: byeol23-backend
+              uri: lb://byeol23-backend
               predicates:
                 - Path=/api/**
-
-
+#?? auth? ?????
 
 logging:
   level:
@@ -25,12 +24,15 @@ logging:
 
 eureka:
   client:
+    healthcheck:
+      enabled: true
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://127.0.0.1:10338/dashboard/eureka
   instance:
     prefer-ip-address: true
+    instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
 
 management:
   endpoints:
