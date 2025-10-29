@@ -1,0 +1,41 @@
+server:
+  port: 10336
+
+spring:
+  application:
+    name: byeol23-gateway
+  cloud:
+    circuitbreaker:
+      resilience4j:
+        enabled: true # ?? ???? ???
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: byeol23-backend
+              uri: lb://byeol23-backend
+              predicates:
+                - Path=/api/**
+#?? auth? ?????
+
+logging:
+  level:
+    root: debug
+
+eureka:
+  client:
+    healthcheck:
+      enabled: true
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://127.0.0.1:10338/dashboard/eureka
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: [health, info]
