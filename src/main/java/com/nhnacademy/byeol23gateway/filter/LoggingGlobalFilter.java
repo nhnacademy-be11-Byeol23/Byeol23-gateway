@@ -20,12 +20,20 @@ public class LoggingGlobalFilter implements GlobalFilter {
         log.info("Request IN - ID: [{}], Method: [{}], URI: {}",
                 request.getId(), request.getMethod(), request.getURI());
 
+        request.getHeaders().forEach((key, values) ->
+                log.info("Request Header => {}: {}", key, values)
+        );
+
         return chain.filter(exchange).then(Mono.fromRunnable(() -> {
 
             ServerHttpResponse response = exchange.getResponse();
 
             log.info("Response OUT - ID: [{}], Status: {}",
                     request.getId(), response.getStatusCode());
+
+            response.getHeaders().forEach((key, values) ->
+                    log.info("Response Header => {}: {}", key, values)
+            );
         }));
     }
 
