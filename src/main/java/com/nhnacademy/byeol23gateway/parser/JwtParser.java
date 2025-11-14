@@ -5,8 +5,6 @@ import java.util.Date;
 
 import org.springframework.stereotype.Component;
 
-import com.nhnacademy.byeol23gateway.parser.exception.DecodeingFailureException;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -26,6 +24,6 @@ public class JwtParser {
 			.getPayload();
 		Date expiration = claims.getExpiration();
 
-		return expiration.before(new Date());
+		return expiration.after(new Date());
 	}
 }

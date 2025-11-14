@@ -46,7 +46,7 @@ management:
         include: [health, info]
 
 jwt:
-  public-key:
+  public-key: |
     -----BEGIN PUBLIC KEY-----
     MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAiNJoRcPJmLQ7Ii+hv78J
     NhtSgo7w7u8TS3PsftAMKBvkqpeAInmnpra1usEPhXTVWOyLLxL6yJAymKY8lzDf

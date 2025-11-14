@@ -17,15 +17,14 @@ public class RouteConfig {
 
 	/*
 		/auth/login은 jwt토큰이 존재하지 않기 때문에 빼주어야 한다.
+		/api/admin 도 추가해야 함
 	 */
 	@Bean
 	public RouteLocator routes(RouteLocatorBuilder builder) {
 		return builder.routes()
-			.route("API-Categories", r -> r.path("/api/categories/**")
-				.uri("lb://BYEOL23-BACKEND"))
 			.route("API-Categories", r -> r.path("/api/members/register")
 				.uri("lb://BYEOL23-BACKEND"))
-			.route("API-Request", r -> r.path("/api/**")
+			.route("API-Request", r -> r.path("/api/members")
 				.filters(f -> f.filter(jwtAuthenticationFilter))
 				.uri("lb://BYEOL23-BACKEND"))
 			.route("AUTH-Login", r -> r.path("/auth/login")
