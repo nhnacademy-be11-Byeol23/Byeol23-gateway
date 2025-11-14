@@ -7,12 +7,19 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.server.ServerWebExchange;
 
+import com.nhnacademy.byeol23gateway.parser.JwtParser;
+
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class JwtAuthenticationFilter implements GatewayFilter {
+
+	private final JwtParser jwtParser;
+
 	@Override
 	public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
 		var request = exchange.getRequest();
@@ -27,8 +34,9 @@ public class JwtAuthenticationFilter implements GatewayFilter {
 				response.setStatusCode(HttpStatus.UNAUTHORIZED);
 				return response.setComplete();
 			} else {
-				if(isValidToken(refreshToken)) {
-
+				if(!jwtParser.isValid(refreshToken)) {
+					response.setStatusCode(HttpStatus.UNAUTHORIZED);
+					return response.setComplete();
 				}
 			}
 		}
@@ -38,18 +46,13 @@ public class JwtAuthenticationFilter implements GatewayFilter {
 			if(accessToken == null || accessToken.isBlank()) {
 				response.setStatusCode(HttpStatus.UNAUTHORIZED);
 				return response.setComplete();
+			} else {
+				if(!jwtParser.isValid(accessToken)) {
+					response.setStatusCode(HttpStatus.UNAUTHORIZED);
+					return response.setComplete();
+				}
 			}
 		}
-		return chain.filter(exchange)
-			.then(Mono.fromRunnable(() -> {
-				var res = exchange.getResponse();
-
-
-			}));
+		return chain.filter(exchange);
 	}
-
-	private boolean isValidToken(String token) {
-
-	}
-
 }
