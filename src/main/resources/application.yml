@@ -21,8 +21,6 @@ spring:
               predicates:
                 - Path=/auth/**
 
-#?? auth? ?????
-
 logging:
   level:
     root: info
