@@ -4,7 +4,6 @@ import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.server.ServerWebExchange;
 
 import com.nhnacademy.byeol23gateway.parser.JwtParser;
@@ -28,7 +27,7 @@ public class JwtAuthenticationFilter implements GatewayFilter {
 		log.info("URI: {}", path);
 
 		if(path.startsWith("/auth")) {
-			String refreshToken = String.valueOf(request.getCookies().getFirst("Refresh-Token"));
+			String refreshToken = request.getCookies().getFirst("Refresh-Token").getValue();
 			log.info("refreshToken = {}", refreshToken);
 			if(refreshToken == null || refreshToken.isBlank()) {
 				response.setStatusCode(HttpStatus.UNAUTHORIZED);

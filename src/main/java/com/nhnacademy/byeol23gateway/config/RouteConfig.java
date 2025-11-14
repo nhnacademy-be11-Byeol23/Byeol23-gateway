@@ -21,6 +21,10 @@ public class RouteConfig {
 	@Bean
 	public RouteLocator routes(RouteLocatorBuilder builder) {
 		return builder.routes()
+			.route("API-Categories", r -> r.path("/api/categories/**")
+				.uri("lb://BYEOL23-BACKEND"))
+			.route("API-Categories", r -> r.path("/api/members/register")
+				.uri("lb://BYEOL23-BACKEND"))
 			.route("API-Request", r -> r.path("/api/**")
 				.filters(f -> f.filter(jwtAuthenticationFilter))
 				.uri("lb://BYEOL23-BACKEND"))
