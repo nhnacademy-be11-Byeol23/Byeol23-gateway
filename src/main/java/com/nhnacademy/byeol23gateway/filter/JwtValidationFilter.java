@@ -15,7 +15,7 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class JwtAuthenticationFilter implements GatewayFilter {
+public class JwtValidationFilter implements GatewayFilter {
 
 	private final JwtParser jwtParser;
 

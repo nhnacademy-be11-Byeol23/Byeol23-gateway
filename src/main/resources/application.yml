@@ -27,8 +27,6 @@ spring:
               filters:
                 - StripPrefix=1
 
-#?? auth? ?????
-
 logging:
   level:
     root: info
