@@ -40,7 +40,7 @@ public class JwtValidationFilter implements GatewayFilter {
 			}
 		}
 		if(path.startsWith("/api")) {
-			String accessToken = String.valueOf(request.getCookies().getFirst("Access-Token"));
+			String accessToken = String.valueOf(request.getCookies().getFirst("Access-Token").getValue());
 			log.info("accessToken = {}", accessToken);
 			if(accessToken == null || accessToken.isBlank()) {
 				response.setStatusCode(HttpStatus.UNAUTHORIZED);
