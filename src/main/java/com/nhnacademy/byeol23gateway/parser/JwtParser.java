@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import com.nhnacademy.byeol23gateway.filter.Role;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 
@@ -35,6 +34,7 @@ public class JwtParser {
 	private Claims parse(String token) {
 		return Jwts.parser()
 			.verifyWith(publicKey)
+			.clockSkewSeconds(60)
 			.build()
 			.parseSignedClaims(token)
 			.getPayload();
