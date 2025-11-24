@@ -1,12 +1,10 @@
-package com.nhnacademy.byeol23gateway.parser.exception;
+package com.nhnacademy.byeol23gateway.exception;
 
 import java.time.LocalDateTime;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import com.nhnacademy.byeol23gateway.ErrorResponse;
 
 import jakarta.servlet.http.HttpServletRequest;
 
