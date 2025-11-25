@@ -1,4 +1,4 @@
-package com.nhnacademy.byeol23gateway;
+package com.nhnacademy.byeol23gateway.exception;
 
 import java.time.LocalDateTime;
 
