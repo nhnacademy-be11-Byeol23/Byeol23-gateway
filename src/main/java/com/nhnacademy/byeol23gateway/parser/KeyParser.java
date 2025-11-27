@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.nhnacademy.byeol23gateway.parser.exception.KeyLoadFailureException;
+import com.nhnacademy.byeol23gateway.exception.KeyLoadFailureException;
 
 @Configuration
 public class KeyParser {
