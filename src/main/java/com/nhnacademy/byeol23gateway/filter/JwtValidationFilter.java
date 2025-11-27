@@ -55,3 +55,4 @@ public class JwtValidationFilter implements GatewayFilter {
 		return chain.filter(exchange);
 	}
 }
+

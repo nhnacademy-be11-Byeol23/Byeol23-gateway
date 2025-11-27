@@ -15,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 public class RouteConfig {
 
 	private final JwtValidationFilter jwtAuthenticationFilter;
-	private final RoleCheckFilter roleCheckFilter;
 
 	@Value("${spring.cloud.gateway.server.webflux.routes[0].uri}")
 	private String backendPath;
