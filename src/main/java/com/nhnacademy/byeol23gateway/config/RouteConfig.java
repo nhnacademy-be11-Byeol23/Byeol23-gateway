@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.nhnacademy.byeol23gateway.filter.JwtValidationFilter;
-import com.nhnacademy.byeol23gateway.filter.RoleCheckFilter;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,9 +29,6 @@ public class RouteConfig {
 	@Bean
 	public RouteLocator routes(RouteLocatorBuilder builder) {
 		return builder.routes()
-			.route("API-Admin", r -> r.path("/api/admin")
-				.filters(f -> f.filter(roleCheckFilter))
-				.uri(backendPath))
 			.route("API-Categories", r -> r.path("/api/members/register")
 				.uri(backendPath))
 			.route("API-Request", r -> r.path("/api/members")
