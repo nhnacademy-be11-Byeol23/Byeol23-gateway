@@ -25,12 +25,6 @@ public class JwtParser {
 		return expiration.after(new Date());
 	}
 
-	public boolean isAdmin(String token) {
-		Claims claims = parse(token);
-		String role = claims.get("role").toString();
-		return Objects.equals(role, Role.ADMIN.name());
-	}
-
 	private Claims parse(String token) {
 		return Jwts.parser()
 			.verifyWith(publicKey)

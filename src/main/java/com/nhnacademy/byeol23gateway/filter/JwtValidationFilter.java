@@ -26,11 +26,6 @@ public class JwtValidationFilter implements GatewayFilter {
 		String path = request.getPath().toString();
 		log.info("URI: {}", path);
 
-		if (path.equals("/auth/logout")) {
-			log.info("Logout request - skipping token validation");
-			return chain.filter(exchange);
-		}
-
 		if(path.startsWith("/auth")) {
 			String refreshToken = request.getCookies().getFirst("Refresh-Token").getValue();
 			log.info("refreshToken = {}", refreshToken);
@@ -45,7 +40,7 @@ public class JwtValidationFilter implements GatewayFilter {
 			}
 		}
 		if(path.startsWith("/api")) {
-			String accessToken = String.valueOf(request.getCookies().getFirst("Access-Token").getValue());
+			String accessToken = request.getCookies().getFirst("Access-Token").getValue();
 			log.info("accessToken = {}", accessToken);
 			if(accessToken == null || accessToken.isBlank()) {
 				response.setStatusCode(HttpStatus.UNAUTHORIZED);
@@ -60,3 +55,4 @@ public class JwtValidationFilter implements GatewayFilter {
 		return chain.filter(exchange);
 	}
 }
+
