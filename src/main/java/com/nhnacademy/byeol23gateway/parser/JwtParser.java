@@ -2,11 +2,9 @@ package com.nhnacademy.byeol23gateway.parser;
 
 import java.security.PublicKey;
 import java.util.Date;
-import java.util.Objects;
 
 import org.springframework.stereotype.Component;
 
-import com.nhnacademy.byeol23gateway.filter.Role;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
