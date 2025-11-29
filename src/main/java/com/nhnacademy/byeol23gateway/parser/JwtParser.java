@@ -3,6 +3,8 @@ package com.nhnacademy.byeol23gateway.parser;
 import java.security.PublicKey;
 import java.util.Date;
 
+import com.nhnacademy.byeol23gateway.exception.InvalidTokenException;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.stereotype.Component;
 
 
@@ -17,8 +19,15 @@ public class JwtParser {
 	private final PublicKey publicKey;
 
 	public boolean isValid(String token) {
-		Claims claims = parse(token);
-		Date expiration = claims.getExpiration();
+
+		Date expiration;
+		try {
+			Claims claims = parse(token);
+			expiration = claims.getExpiration();
+		} catch(ExpiredJwtException e) {
+			throw new InvalidTokenException(e.getMessage());
+		}
+
 
 		return expiration.after(new Date());
 	}
