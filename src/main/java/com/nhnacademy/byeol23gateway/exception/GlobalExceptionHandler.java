@@ -2,12 +2,14 @@ package com.nhnacademy.byeol23gateway.exception;
 
 import java.time.LocalDateTime;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -28,6 +30,17 @@ public class GlobalExceptionHandler {
 			e.getMessage(),
 			request.getRequestURI(),
 			LocalDateTime.now()
+		);
+	}
+
+	@ExceptionHandler(InvalidTokenException.class)
+	public ErrorResponse handleInvalidTokenException(InvalidTokenException e, HttpServletRequest request) {
+		log.info("InvalidTokenException");
+		return new ErrorResponse(
+				HttpStatus.UNAUTHORIZED.value(),
+				e.getMessage(),
+				request.getRequestURI(),
+				LocalDateTime.now()
 		);
 	}
 }
