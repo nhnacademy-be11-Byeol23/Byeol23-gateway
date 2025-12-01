@@ -35,6 +35,8 @@ public class RouteConfig {
 			.route("AUTH-Request", r -> r.path("/auth/**")
 				.filters(f -> f.filter(jwtValidationFilter))
 				.uri(authenticationPath))
+			.route("API-Categories", r -> r.path("/api/**")
+				.uri(backendPath))
 			.build();
 	}
 }
