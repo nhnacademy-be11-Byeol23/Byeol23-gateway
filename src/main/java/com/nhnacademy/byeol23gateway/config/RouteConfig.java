@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class RouteConfig {
 
-	private final JwtValidationFilter jwtValidationFilter;
+	private final JwtValidationFilter jwtAuthenticationFilter;
 
 	@Value("${spring.cloud.gateway.server.webflux.routes[0].uri}")
 	private String backendPath;
@@ -34,17 +34,15 @@ public class RouteConfig {
 			.route("API-Categories", r -> r.path("/api/members/register")
 				.uri(backendPath))
 			.route("API-Request", r -> r.path("/api/members")
-				.filters(f -> f.filter(jwtValidationFilter))
+				.filters(f -> f.filter(jwtAuthenticationFilter))
 				.uri(backendPath))
 			.route("AUTH-Login", r -> r.path("/auth/login")
 				.uri(authenticationPath))
 			.route("SEARCH", r -> r.path(searchURI)
 			.uri(searchPath))
 			.route("AUTH-Request", r -> r.path("/auth/**")
-				.filters(f -> f.filter(jwtValidationFilter))
+				.filters(f -> f.filter(jwtAuthenticationFilter))
 				.uri(authenticationPath))
-			.route("API-Categories", r -> r.path("/api/**")
-				.uri(backendPath))
 			.build();
 	}
 }
