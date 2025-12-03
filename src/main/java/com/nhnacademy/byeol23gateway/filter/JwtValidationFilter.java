@@ -26,49 +26,34 @@ public class JwtValidationFilter implements GatewayFilter {
 		var request = exchange.getRequest();
 		var response = exchange.getResponse();
 		String path = request.getPath().toString();
+		
 
-		log.info("Request URI: {}", path);
-
-		// /api 로 시작하지 않으면 이 필터는 아무 것도 안 하고 통과
-		if (!path.startsWith("/api")) {
-			return chain.filter(exchange);
+		if(path.startsWith("/auth")) {
+			String refreshToken = request.getCookies().getFirst("Refresh-Token").getValue();
+			log.info("refreshToken = {}", refreshToken);
+			if(refreshToken == null || refreshToken.isBlank()) {
+				response.setStatusCode(HttpStatus.UNAUTHORIZED);
+				return response.setComplete();
+			} else {
+				if(!jwtParser.isValid(refreshToken)) {
+					response.setStatusCode(HttpStatus.UNAUTHORIZED);
+					return response.setComplete();
+				}
+			}
 		}
+		if(path.startsWith("/api")) {
+			String accessToken = request.getCookies().getFirst("Access-Token").getValue();
+			log.info("accessToken = {}", accessToken);
+			if(accessToken == null || accessToken.isBlank()) {
+				response.setStatusCode(HttpStatus.UNAUTHORIZED);
+				return response.setComplete();
+			} else {
+				if(!jwtParser.isValid(accessToken)) {
+					response.setStatusCode(HttpStatus.UNAUTHORIZED);
+					return response.setComplete();
+				}
+			}
 
-		// 1. Authorization 헤더에서 Bearer 토큰 추출
-		String authHeader = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-		log.info("Authorization Header = {}", authHeader);
-
-		if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-			log.warn("Authorization 헤더가 없거나 형식이 올바르지 않습니다.");
-			response.setStatusCode(HttpStatus.UNAUTHORIZED);
-			return response.setComplete();
-		}
-
-		String accessToken = authHeader.substring(7);
-
-		try {
-			Claims claims = jwtParser.parse(accessToken);
-
-			Long memberId = claims.get("memberId", Long.class);
-			String role = claims.get("role", String.class);
-
-			log.info("JWT 검증 성공 - memberId: {}, role: {}", memberId, role);
-
-			var mutatedRequest = request.mutate()
-					.header("X-Member-Id", String.valueOf(memberId))
-					.header("X-Role", role != null ? role : "")
-					.build();
-
-			return chain.filter(
-					exchange.mutate()
-							.request(mutatedRequest)
-							.build()
-			);
-
-		} catch (Exception e) {
-			log.warn("JWT 검증 실패: {}", e.getMessage());
-			response.setStatusCode(HttpStatus.UNAUTHORIZED);
-			return response.setComplete();
 		}
 	}
 }
