@@ -21,13 +21,10 @@ public class RouteConfig {
 
 	@Value("${spring.cloud.gateway.server.webflux.routes[1].uri}")
 	private String authenticationPath;
-
-	@Value("${spring.cloud.gateway.server.webflux.routes[2].uri}")
-	private String searchPath;
-
-	@Value("${spring.cloud.gateway.server.webflux.routes[2].predicates[0]}")
-	private String searchURI;
-
+	/*
+		/auth/login은 jwt토큰이 존재하지 않기 때문에 빼주어야 한다.
+		/api/admin 도 추가해야 함
+	 */
 	@Bean
 	public RouteLocator routes(RouteLocatorBuilder builder) {
 		return builder.routes()
@@ -38,8 +35,6 @@ public class RouteConfig {
 				.uri(backendPath))
 			.route("AUTH-Login", r -> r.path("/auth/login")
 				.uri(authenticationPath))
-			.route("SEARCH", r -> r.path(searchURI)
-			.uri(searchPath))
 			.route("AUTH-Request", r -> r.path("/auth/**")
 				.filters(f -> f.filter(jwtAuthenticationFilter))
 				.uri(authenticationPath))

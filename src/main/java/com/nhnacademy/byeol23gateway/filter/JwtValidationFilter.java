@@ -32,6 +32,11 @@ public class JwtValidationFilter implements GatewayFilter {
 			if(refreshToken == null || refreshToken.isBlank()) {
 				response.setStatusCode(HttpStatus.UNAUTHORIZED);
 				return response.setComplete();
+			} else {
+				if(!jwtParser.isValid(refreshToken)) {
+					response.setStatusCode(HttpStatus.UNAUTHORIZED);
+					return response.setComplete();
+				}
 			}
 		}
 		if(path.startsWith("/api")) {
@@ -40,6 +45,11 @@ public class JwtValidationFilter implements GatewayFilter {
 			if(accessToken == null || accessToken.isBlank()) {
 				response.setStatusCode(HttpStatus.UNAUTHORIZED);
 				return response.setComplete();
+			} else {
+				if(!jwtParser.isValid(accessToken)) {
+					response.setStatusCode(HttpStatus.UNAUTHORIZED);
+					return response.setComplete();
+				}
 			}
 		}
 		return chain.filter(exchange);
