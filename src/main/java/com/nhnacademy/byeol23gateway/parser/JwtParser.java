@@ -23,7 +23,7 @@ public class JwtParser {
 		return expiration.after(new Date());
 	}
 
-	private Claims parse(String token) {
+	public Claims parse(String token) {
 		return Jwts.parser()
 			.verifyWith(publicKey)
 			.clockSkewSeconds(60)

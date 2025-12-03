@@ -1,20 +1,18 @@
 package com.nhnacademy.byeol23gateway.config;
 
+import com.nhnacademy.byeol23gateway.filter.JwtValidationFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.nhnacademy.byeol23gateway.filter.JwtValidationFilter;
-
-import lombok.RequiredArgsConstructor;
-
 @Configuration
 @RequiredArgsConstructor
 public class RouteConfig {
 
-	private final JwtValidationFilter jwtAuthenticationFilter;
+	private final JwtValidationFilter jwtValidationFilter;
 
 	@Value("${spring.cloud.gateway.server.webflux.routes[0].uri}")
 	private String backendPath;
@@ -31,18 +29,18 @@ public class RouteConfig {
 	@Bean
 	public RouteLocator routes(RouteLocatorBuilder builder) {
 		return builder.routes()
-			.route("API-Categories", r -> r.path("/api/members/register")
-				.uri(backendPath))
-			.route("API-Request", r -> r.path("/api/members")
-				.filters(f -> f.filter(jwtAuthenticationFilter))
-				.uri(backendPath))
-			.route("AUTH-Login", r -> r.path("/auth/login")
-				.uri(authenticationPath))
-			.route("SEARCH", r -> r.path(searchURI)
-			.uri(searchPath))
-			.route("AUTH-Request", r -> r.path("/auth/**")
-				.filters(f -> f.filter(jwtAuthenticationFilter))
-				.uri(authenticationPath))
-			.build();
+				.route("API-CATEGORIES", r -> r.path("/api/categories/**")
+						.uri(backendPath))
+				.route("API-MEMBER-REGISTER", r -> r.path("/api/members/register")
+						.uri(backendPath))
+				.route("API-SECURED", r -> r.path("/api/**")
+						.filters(f -> f.filter(jwtValidationFilter))
+						.uri(backendPath))
+				.route("AUTH", r -> r.path("/auth/**")
+						.uri(authenticationPath))
+				.route("SEARCH", r -> r.path(searchURI)
+						.uri(searchPath))
+
+				.build();
 	}
 }
