@@ -1,6 +1,5 @@
 package com.nhnacademy.byeol23gateway.config;
 
-import com.nhnacademy.byeol23gateway.filter.JwtValidationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.route.RouteLocator;
@@ -11,9 +10,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @RequiredArgsConstructor
 public class RouteConfig {
-
-	private final JwtValidationFilter jwtValidationFilter;
-
 	@Value("${spring.cloud.gateway.server.webflux.routes[0].uri}")
 	private String backendPath;
 
@@ -34,7 +30,6 @@ public class RouteConfig {
 				.route("API-MEMBER-REGISTER", r -> r.path("/api/members/register")
 						.uri(backendPath))
 				.route("API-SECURED", r -> r.path("/api/**")
-						.filters(f -> f.filter(jwtValidationFilter))
 						.uri(backendPath))
 				.route("AUTH", r -> r.path("/auth/**")
 						.uri(authenticationPath))
