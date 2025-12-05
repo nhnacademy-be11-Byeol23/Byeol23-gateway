@@ -1,43 +1,41 @@
 package com.nhnacademy.byeol23gateway.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.nhnacademy.byeol23gateway.filter.JwtValidationFilter;
-
-import lombok.RequiredArgsConstructor;
-
 @Configuration
 @RequiredArgsConstructor
 public class RouteConfig {
-
-	private final JwtValidationFilter jwtAuthenticationFilter;
-
 	@Value("${spring.cloud.gateway.server.webflux.routes[0].uri}")
 	private String backendPath;
 
 	@Value("${spring.cloud.gateway.server.webflux.routes[1].uri}")
 	private String authenticationPath;
-	/*
-		/auth/login은 jwt토큰이 존재하지 않기 때문에 빼주어야 한다.
-		/api/admin 도 추가해야 함
-	 */
+
+	@Value("${spring.cloud.gateway.server.webflux.routes[2].uri}")
+	private String searchPath;
+
+	@Value("${spring.cloud.gateway.server.webflux.routes[2].predicates[0]}")
+	private String searchURI;
+
 	@Bean
 	public RouteLocator routes(RouteLocatorBuilder builder) {
 		return builder.routes()
-			.route("API-Categories", r -> r.path("/api/members/register")
-				.uri(backendPath))
-			.route("API-Request", r -> r.path("/api/members")
-				.filters(f -> f.filter(jwtAuthenticationFilter))
-				.uri(backendPath))
-			.route("AUTH-Login", r -> r.path("/auth/login")
-				.uri(authenticationPath))
-			.route("AUTH-Request", r -> r.path("/auth/**")
-				.filters(f -> f.filter(jwtAuthenticationFilter))
-				.uri(authenticationPath))
-			.build();
+				.route("API-CATEGORIES", r -> r.path("/api/categories/**")
+						.uri(backendPath))
+				.route("API-MEMBER-REGISTER", r -> r.path("/api/members/register")
+						.uri(backendPath))
+				.route("API-SECURED", r -> r.path("/api/**")
+						.uri(backendPath))
+				.route("AUTH", r -> r.path("/auth/**")
+						.uri(authenticationPath))
+				.route("SEARCH", r -> r.path(searchURI)
+						.uri(searchPath))
+
+				.build();
 	}
 }
